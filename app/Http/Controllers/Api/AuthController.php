@@ -83,4 +83,8 @@ class AuthController extends Controller
             return response(['user' => $user, 'message' => 'User updated successfully']);
         }
     }
+
+    public function me(){
+        return response(['user' => auth()->user()]);
+    }
 }

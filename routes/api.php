@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login",    [AuthController::class, "login"]);
 Route::post("logout",   [AuthController::class, "logout"]);
-Route::post("updateUser/{id}", [AuthController::class, "updateUser"]);
 
 //HOTEL
 Route::post("add-hotel", [HotelController::class, "addHotel"]);
@@ -49,4 +48,11 @@ Route::post("showPlaceInProvince", [ProvinceController::class, 'showPlaceInProvi
 
 //Get All Location
 Route::get('locations', [LocationController::class, 'getAllLocations']);
+
+// Group Middleware
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('me', [AuthController::class, 'me']);
+    Route::post("updateUser/{id}", [AuthController::class, "updateUser"]);
+
+});
 
