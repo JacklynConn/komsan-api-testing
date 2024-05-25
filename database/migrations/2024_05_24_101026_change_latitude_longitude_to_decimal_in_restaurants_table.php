@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('food', function (Blueprint $table) {
-            //
-            $table->foreignId('res_id')->after('food_id')->references('res_id')->on('restaurants')->onDelete('cascade');
+        Schema::table('restaurants', function (Blueprint $table) {
+            $table->decimal('latitude', 65, 15)->change();
+            $table->decimal('longitude', 65, 15)->change();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('food', function (Blueprint $table) {
-            //
-            $table->dropColumn('res_id');
+        Schema::table('restaurants', function (Blueprint $table) {
+            $table->float('latitude')->change();
+            $table->float('longitude')->change();
         });
     }
 };

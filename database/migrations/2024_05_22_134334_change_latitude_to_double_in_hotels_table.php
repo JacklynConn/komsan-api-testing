@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('restaurants', function (Blueprint $table) {
-            //
-            $table->string('open_time');
-            $table->string('close_time');
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->double('latitude')->change();
+            $table->double('longitude')->change();
         });
     }
 
@@ -23,10 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('restaurants', function (Blueprint $table) {
-            //
-            $table->dropColumn('open_time');
-            $table->dropColumn('close_time');
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->string('latitude')->change();
+            $table->string('longitude')->change();
         });
     }
 };
