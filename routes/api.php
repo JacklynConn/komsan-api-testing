@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login",    [AuthController::class, "login"]);
 Route::post("logout",   [AuthController::class, "logout"]);
+Route::post("check-phone", [AuthController::class, "checkPhone"]);
 
 //HOTEL
 Route::post("add-hotel", [HotelController::class, "addHotel"]);
@@ -25,16 +26,13 @@ Route::get("get-hotel/{hotel_id}", [HotelController::class, "getHotel"]);
 Route::post("add-cat-hotel", [CategoryHotelController::class, "addCatHotel"]);
 Route::get("get-cat-hotel/{cat_hotel_id}", [CategoryHotelController::class, "getCatHotel"]);
 
-
 //Restaurant
 Route::post("add-restaurant", [RestaurantController::class, "addRestaurant"]);
 Route::get("get-allRes", [RestaurantController::class, "getAllRestaurant"]);
 Route::post("add-foodtype", [FoodTypeController::class, "addFoodType"]);
 Route::post("search-restaurant", [RestaurantController::class, "searchRestaurant"]);
 
-
 //Place
-
 Route::post("add-place", [PlaceController::class, "addPlace"]);
 Route::post("add-cat-place", [CategoryPlaceController::class, "addCatPlace"]);
 Route::get('get-place/{place_id}', [PlaceController::class, 'getPlace']);
@@ -51,8 +49,7 @@ Route::get('locations', [LocationController::class, 'getAllLocations']);
 
 // Group Middleware
 Route::group(['middleware' => 'auth:api'], function () {
+    //AUTH
     Route::get('me', [AuthController::class, 'me']);
-    Route::post("updateUser/{id}", [AuthController::class, "updateUser"]);
-
 });
 

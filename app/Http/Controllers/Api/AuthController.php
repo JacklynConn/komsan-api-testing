@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -8,14 +9,26 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
+    public function checkPhone(Request $request)
+    {
+        $phone = $request->phone;
+        $user = User::where('phone', $phone)->first();
+        if ($user) {
+            return response()->json(['status' => 'exists'], 200);
+        }
+        return response()->json(['status' => 'not_exists'], 200);
+    }
+
     public function register(Request $request)
     {
         // update email from users table
-        $validateData = $request->validate([ // modified #IT-122 Mak Mach 2024-05-12
-            'name' => 'required|max:255',
-            'phone' => 'required|unique:users',
-            'email' => 'nullable|email|unique:users', // modified #IT-122 Mak Mach 2024-05-12
+        $validateData = $request->validate([
+            'name' => 'required|max:55',
+            'phone' => 'required|unique:users|min:7',
             'password' => 'required|min:6',
+            'profile_img' => 'required',
+            'status' => 'nullable|boolean',
         ]);
 
         // modified #IT-122 Mak Mach 2024-05-12
@@ -28,9 +41,9 @@ class AuthController extends Controller
             $validateData['profile_img'] = $profile_name;
         }
 
+        $user->status = $request->input('status', 0); // Default status to 0 if not provided
         $user = User::create($validateData);
-        $accessToken = $user->createToken('authToken')->accessToken;
-        return response(['user' => $user, 'access_token' => $accessToken, 'message' => 'User created successfully']);
+        return response(['user' => $user, 'message' => 'User created successfully']);
     }
 
     public function login(Request $request)
@@ -84,7 +97,8 @@ class AuthController extends Controller
         }
     }
 
-    public function me(){
+    public function me()
+    {
         return response(['user' => auth()->user()]);
     }
 }

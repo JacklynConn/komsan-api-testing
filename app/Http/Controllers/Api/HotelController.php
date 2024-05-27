@@ -48,12 +48,12 @@ class HotelController extends Controller
 
          // Handle image upload
          if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) 
+            foreach ($request->file('images') as $image)
             {
             $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = '/images/hotel_gallery/';
             $image->move(public_path($imagePath), $imageName);
-    
+
             // Create hotel gallery entry
             $gallery = new HotelGallery();
             $gallery->image = $imagePath . $imageName;
@@ -73,7 +73,7 @@ class HotelController extends Controller
         try {
             $hotels = Hotel::with(['village.province',
              'categoryHotel' , 'hotelTypes', 'hotelGallery'])->get();
-            
+
             // Transform the image URL to full URL
             $hotels->transform(function ($hotel) {
                 $hotel->hotelGallery->transform(function ($gallery) {
@@ -82,7 +82,7 @@ class HotelController extends Controller
                 });
                 return $hotel;
             });
-    
+
             return response()->json(['data' => $hotels], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while retrieving hotels'], 500);
@@ -93,7 +93,7 @@ class HotelController extends Controller
     {
         try {
             $hotel = Hotel::with('hotelTypes','hotelGallery')->findOrFail($hotel_id);
-    
+
             return response()->json(['data' => $hotel], 200);
         } catch (ModelNotFoundException $exception) {
             return response()->json(['error' => 'Hotel not found'], 404);
@@ -115,7 +115,7 @@ class HotelController extends Controller
 
         // Retrieve the hotels matching the search criteria
         $hotels = $query->get();
-        
+
         // Check if any hotels are found
         if ($hotels->isEmpty()) {
             return response()->json(['message' => 'No hotels found'], 200);
@@ -123,6 +123,6 @@ class HotelController extends Controller
 
         // Return the response
         return response()->json(['data' => $hotels], 200);
-    } 
+    }
 
 }
